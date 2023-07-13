@@ -92,7 +92,7 @@ public class PlayerPhysicalController : MonoBehaviour
     VerticalStateCode vertical_state = VerticalStateCode.GROUNDED; // 默认着陆状态
 
     // 后期开火逻辑用，因为可以直接取用transform.localScale.x，这里就不额外用一个变量记了
-    float orientation // 这个以input为准，左负右正，localScale的x默认是和这个相反的，因为贴图是朝左的，所以这里反转一下
+    public float orientation // 这个以input为准，左负右正，localScale的x默认是和这个相反的，因为贴图是朝左的，所以这里反转一下
     {
         get { return transform.localScale.x < 0 ? 1f : -1f; }
         set
@@ -126,7 +126,7 @@ public class PlayerPhysicalController : MonoBehaviour
 
     void FireHandler()
     {
-        if (ctrl.OnFire() && current_weapon.TryFire(transform))
+        if (ctrl.OnFire() && current_weapon.TryFire(transform, orientation))
         {
             velocity.x -= orientation * current_weapon.anti_impulse;
         }

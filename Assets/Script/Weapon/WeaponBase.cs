@@ -16,24 +16,23 @@ public class WeaponBase : MonoBehaviour
 
     public virtual bool CheckAmmo() { return true; }
 
-    public bool TryFire(Transform transform)
+    public bool TryFire(Transform transform, float orientation)
     {
         if (Time.time >= next_shot_time)
         {
             next_shot_time = Time.time + cooldown;
-            Fire(transform);
+            Fire(transform, orientation);
             return true;
         }
         return false;
     }
 
     // 构造子弹
-    protected virtual void Fire(Transform transform)
+    protected virtual void Fire(Transform transform, float orientation)
     {
         GameObject bullet = Instantiate(bullet_prefab, transform.position, transform.rotation);
         BulletNormal bullet_physics = bullet.GetComponent<BulletNormal>();
-        float orientation = PlayerPhysicalController.GetOrientation(transform.localScale);
         
-        bullet_physics.init(new Vector3(bullet_speed * orientation, 0f, 0f), orientation > 0);
+        bullet_physics.init(new Vector3(bullet_speed * orientation, 0f, 0f), orientation);
     }
 }

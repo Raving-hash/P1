@@ -26,8 +26,8 @@ public class JoiningGame : MonoBehaviour
     }
     void HoldFireToJoinEvent()
     {
-        string[] joystick_names = Input.GetJoystickNames();
-
+        //string[] joystick_names = Input.GetJoystickNames();
+        string[] joystick_names = { };
         for (int i = 1; i <= joystick_names.Length; ++i)
         {
             string k = $"j{i}";
