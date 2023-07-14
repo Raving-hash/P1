@@ -7,7 +7,7 @@ public class WeaponBase : MonoBehaviour
     protected virtual float cooldown => .12f; // 配表数据
     protected virtual float bullet_speed => 12f;
     public virtual float anti_impulse => .4f; // 反冲量
-    public virtual float hit_impulse => 2f; // 被弹冲量
+    public virtual float hitback => 12f; // 被弹冲量
 
     public GameObject bullet_prefab;
 
@@ -30,9 +30,9 @@ public class WeaponBase : MonoBehaviour
     // 构造子弹
     protected virtual void Fire(Transform transform, float orientation)
     {
-        GameObject bullet = Instantiate(bullet_prefab, transform.position, transform.rotation);
+        GameObject bullet = Instantiate(bullet_prefab, transform.position + orientation * new Vector3(.5f,0,0), transform.rotation);
         BulletNormal bullet_physics = bullet.GetComponent<BulletNormal>();
         
-        bullet_physics.init(new Vector3(bullet_speed * orientation, 0f, 0f), orientation);
+        bullet_physics.init(new Vector3(bullet_speed * orientation, 0f, 0f), orientation, hitback);
     }
 }

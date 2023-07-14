@@ -141,4 +141,25 @@ public class PlayerPhysicalController : MonoBehaviour
         // 应用移动
         transform.Translate(velocity * Time.deltaTime);
     }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        //Debug.Log("Triggered" + collision.gameObject.name);
+        if(collision.gameObject.name.Contains("bullet"))
+        {
+            BulletNormal bullet = collision.gameObject.GetComponent<BulletNormal>();
+            velocity.x += bullet.orientation * bullet.hitback;
+            Destroy(collision.gameObject);
+        }
+    }
+
+    //void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    Debug.Log("tri" + collision);
+    //}
+
+    //void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    Debug.Log("ts" + collision);
+    //}
 }

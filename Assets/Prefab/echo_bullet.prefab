@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4543153918839057172, guid: 680a59fbc2ff04b4b8d5ad4413a16740, type: 3}
       propertyPath: m_Name
-      value: bullet 1
+      value: echo_bullet
       objectReference: {fileID: 0}
     - target: {fileID: 7324715200298914424, guid: 680a59fbc2ff04b4b8d5ad4413a16740, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7324715200298914424, guid: 680a59fbc2ff04b4b8d5ad4413a16740, type: 3}
       propertyPath: m_LocalPosition.x
@@ -59,6 +59,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7331141435966614177, guid: 680a59fbc2ff04b4b8d5ad4413a16740, type: 3}
     - {fileID: -472766008573482145, guid: 680a59fbc2ff04b4b8d5ad4413a16740, type: 3}
+    - {fileID: 3958459043248627806, guid: 680a59fbc2ff04b4b8d5ad4413a16740, type: 3}
+    - {fileID: 8875172895925321451, guid: 680a59fbc2ff04b4b8d5ad4413a16740, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

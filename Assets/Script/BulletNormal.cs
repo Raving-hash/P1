@@ -12,17 +12,28 @@ public class BulletNormal : MonoBehaviour
 
     Vector3 velocity;
 
+    public float hitback; // 击退冲量
+
     // 朝向和速度，构造后传参
-    public void init(Vector3 _velocity, float orientation)
+    public void init(Vector3 _velocity, float _orientation, float _hitback)
     {
         velocity = _velocity;
-        if (orientation < 0)
-            transform.localScale = new Vector3(-1, 1, 1);
+        orientation = _orientation;
+        hitback = _hitback;
+        //if (orientation < 0)
+            //transform.localScale = new Vector3(-1, 1, 1);
         //if (is_left)
             //GetComponent<SpriteRenderer>().flipX = true;
 
         //TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
         //trailRenderer.Clear();
+    }
+
+    // 子弹贴图向右，所以右时localScale.x=1
+    public float orientation
+    {
+        get => transform.localScale.x > 0 ? 1f : -1f;
+        set => transform.localScale = new Vector3(value, transform.localScale.y, transform.localScale.z);
     }
 
     // Update is called once per frame
@@ -39,6 +50,10 @@ public class BulletNormal : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        
     }
 }

@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 9044728746686239599}
   - component: {fileID: 4196026877175253547}
   - component: {fileID: 8554163594123325543}
-  - component: {fileID: 8411979683909697343}
   - component: {fileID: 8425220715333947331}
+  - component: {fileID: 2265433074758437570}
+  - component: {fileID: 8411979683909697343}
   m_Layer: 0
   m_Name: hero
   m_TagString: Untagged
@@ -108,22 +109,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8411979683909697343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8096651696447350411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ca47003ad4a29d46811157a863b40cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  default_weapon_prefab: {fileID: 2112534196463791616, guid: 02636af39f6cf9347958eab97e329dda, type: 3}
-  horizontal_accelare: 5
-  horizontal_velocity_limit: 10
-  floating_jump_cnt_limit: 1
 --- !u!61 &8425220715333947331
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -153,10 +138,10 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0032234043, y: 0.0065021217}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -167,5 +152,48 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.3854985, y: 0.5565761}
   m_EdgeRadius: 0
+--- !u!50 &2265433074758437570
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8096651696447350411}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &8411979683909697343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8096651696447350411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca47003ad4a29d46811157a863b40cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  default_weapon_prefab: {fileID: 2112534196463791616, guid: 02636af39f6cf9347958eab97e329dda, type: 3}
+  horizontal_accelare: 5
+  horizontal_velocity_limit: 10
+  floating_jump_cnt_limit: 1
