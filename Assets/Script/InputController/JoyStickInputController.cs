@@ -14,9 +14,14 @@ public class JoyStickInputController : BaseController
     const int bomb = 1;
     const int jump = 0;
 
+    const int joystick_offset = (int)KeyCode.Joystick1Button0; // 350 370 390 etc
+    const int joystick_num_offset = (int)(KeyCode.Joystick2Button0 - KeyCode.Joystick1Button0);
+
+    static KeyCode KC(int id, int k) => (KeyCode)(k + joystick_offset + (id-1) * joystick_num_offset);
+
     // 开火键测试，长押开火键加入
-    public static bool JoinKeyDownTest(int id) { return Input.GetButtonDown($"joystick {id} button {fire}"); }
-    public static bool JoinKeyUpTest(int id) { return Input.GetButtonUp($"joystick {id} button {fire}"); }
+    public static bool JoinKeyDownTest(int id) { return Input.GetKeyDown(KC(id, fire)); }
+    public static bool JoinKeyUpTest(int id) { return Input.GetKeyUp(KC(id, fire)); }
 
     public override void OnLogicFrameUpdate()
     {
@@ -32,8 +37,8 @@ public class JoyStickInputController : BaseController
     int _id;
     string _name;
     public void SetJoystickInfo(int id, string name) { _id = id; _name = name;/* _init = true;*/ }
-    bool KD(int b) { return Input.GetButtonDown($"joystick {_id} button {b}"); }
-    bool KU(int b) { return Input.GetButtonUp($"joystick {_id} button {b}"); }
+    bool KD(int b) { return Input.GetKeyDown(KC(_id, b)); }
+    bool KU(int b) { return Input.GetKeyUp(KC(_id, b)); }
     public override bool OnExitDown() { return KD(bomb); }
     public override bool OnExitUp() { return KU(bomb); }
     public override bool OnUp() { return KD(jump) || Input.GetAxisRaw("Vertical_" + _name) > verticalAxisDeadZone; } // 跳跃别支持长押

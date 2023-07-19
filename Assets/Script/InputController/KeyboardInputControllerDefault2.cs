@@ -9,7 +9,7 @@ public class KeyboardInputControllerDefault2 : BaseController
     const KeyCode right = KeyCode.RightArrow;
     const KeyCode up = KeyCode.UpArrow;
     const KeyCode down = KeyCode.DownArrow;
-    const KeyCode fire = KeyCode.Keypad0;
+    const KeyCode fire = KeyCode.Period;
     const KeyCode bomb = KeyCode.KeypadPeriod;
     // 这里往下应该使用如上定义的Keycode，不应该出现magic number
 
