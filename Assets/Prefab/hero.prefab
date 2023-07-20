@@ -218,6 +218,8 @@ GameObject:
   - component: {fileID: 8425220715333947331}
   - component: {fileID: 2265433074758437570}
   - component: {fileID: 8411979683909697343}
+  - component: {fileID: 7684051673031476508}
+  - component: {fileID: 7955639450026482950}
   m_Layer: 0
   m_Name: hero
   m_TagString: Untagged
@@ -398,7 +400,130 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca47003ad4a29d46811157a863b40cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerID: 0
   default_weapon_prefab: {fileID: 2112534196463791616, guid: 02636af39f6cf9347958eab97e329dda, type: 3}
   horizontal_accelare: 5
   horizontal_velocity_limit: 10
   floating_jump_cnt_limit: 1
+--- !u!114 &7684051673031476508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8096651696447350411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: b8f482daefa7e51459723d06e6f57146, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7955639450026482950}
+        m_TargetAssemblyTypeName: InputSystemBridge, Assembly-CSharp
+        m_MethodName: Down
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 12409e67-8435-4dcd-b859-d40a69425413
+    m_ActionName: Movement/Down[/Keyboard/s,/Keyboard/downArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7955639450026482950}
+        m_TargetAssemblyTypeName: InputSystemBridge, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: aae125ec-1711-4b09-968d-ee1244f49681
+    m_ActionName: Movement/Jump[/Keyboard/space,/Keyboard/w,/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7955639450026482950}
+        m_TargetAssemblyTypeName: InputSystemBridge, Assembly-CSharp
+        m_MethodName: Horizontal
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8820f35d-415a-464b-814d-a011e570be6d
+    m_ActionName: Movement/Horizontal[/Keyboard/a,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7955639450026482950}
+        m_TargetAssemblyTypeName: InputSystemBridge, Assembly-CSharp
+        m_MethodName: Fire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2225bd57-3ba5-4f7d-b383-21b55cf84e5d
+    m_ActionName: Movement/Fire[/Keyboard/j,/Keyboard/period]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7955639450026482950}
+        m_TargetAssemblyTypeName: InputSystemBridge, Assembly-CSharp
+        m_MethodName: Bomb
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 254dfb2d-2976-4096-8120-ca620a8a0827
+    m_ActionName: Movement/Bomb[/Keyboard/k,/Keyboard/slash]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Movement
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &7955639450026482950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8096651696447350411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44a0119a67ae5074f94dded2a2140a5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

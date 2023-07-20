@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 // 负责处理角色的物理逻辑，动画状态机应该参照本脚本
 public class PlayerPhysicalController : MonoBehaviour
 {
+    public int PlayerID;
+    public int GetPlayerID() { return PlayerID; }
+
     Animator animator;
     // Start is called before the first frame update
-    public BaseController ctrl = new BaseController(); // 如果还没被JoinningGame放进来，则开一个空输入的BaseController，这样我们就不用判空了
+    public StoreOnlyController ctrl = new StoreOnlyController(); // 如果还没被JoiningGame放进来，则开一个空输入的BaseController，这样我们就不用判空了
 
     public static float ground_height = -3f;
     public static float kill_height = -100f;
@@ -152,14 +155,4 @@ public class PlayerPhysicalController : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
-
-    //void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Debug.Log("tri" + collision);
-    //}
-
-    //void OnCollisionStay2D(Collision2D collision)
-    //{
-    //    Debug.Log("ts" + collision);
-    //}
 }

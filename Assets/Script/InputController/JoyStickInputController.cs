@@ -20,8 +20,9 @@ public class JoyStickInputController : BaseController
     static KeyCode KC(int id, int k) => (KeyCode)(k + joystick_offset + (id-1) * joystick_num_offset);
 
     // 开火键测试，长押开火键加入
-    public static bool JoinKeyDownTest(int id) { return Input.GetKeyDown(KC(id, fire)); }
-    public static bool JoinKeyUpTest(int id) { return Input.GetKeyUp(KC(id, fire)); }
+    public static bool JoinKeyDownTest(int id) { return Input.GetButtonDown($"joystick {id} button {fire}"); }
+    public static bool JoinKeyUpTest(int id) { return Input.GetButtonUp($"joystick {id} button {fire}"); }
+
 
     public override void OnLogicFrameUpdate()
     {

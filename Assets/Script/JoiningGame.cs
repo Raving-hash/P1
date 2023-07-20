@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 加入游戏场景的主逻辑代码
+// 这个类不处理Input的具体实现
 public class JoiningGame : MonoBehaviour
 {
     public float pressingThreshold = 1f; // How many seconds should players press to join
@@ -24,6 +25,7 @@ public class JoiningGame : MonoBehaviour
         HoldFireToJoinEvent();
         HoldBombToLeaveEvent();
     }
+    // 使用InputManager时使用，用InputSystem则不用
     void HoldFireToJoinEvent()
     {
         //string[] joystick_names = Input.GetJoystickNames();
@@ -39,6 +41,7 @@ public class JoiningGame : MonoBehaviour
             else if (JoyStickInputController.JoinKeyUpTest(i))
                 pressingRecord.Remove(k);
         }
+        Debug.Log("jn:" + joystick_names + ", pr:" + pressingRecord + ", len:" + pressingRecord.Count);
 
         string k1 = "k1";
         if (!pressingRecord.ContainsKey(k1))
@@ -70,7 +73,7 @@ public class JoiningGame : MonoBehaviour
             {
                 GameObject obj = Instantiate(playerAvatarPrefab, transform, true);
                 PlayerPhysicalController player_script = obj.GetComponent<PlayerPhysicalController>();
-                player_script.ctrl = BaseController.ControllerFactory(key, joystick_names);
+                //player_script.ctrl = BaseController.ControllerFactory(key, joystick_names);
                 localPlayers.Add(key, obj);
             }
         }
