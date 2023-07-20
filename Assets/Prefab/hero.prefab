@@ -510,8 +510,8 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 254dfb2d-2976-4096-8120-ca620a8a0827
     m_ActionName: Movement/Bomb[/Keyboard/k,/Keyboard/slash]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: KB
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}

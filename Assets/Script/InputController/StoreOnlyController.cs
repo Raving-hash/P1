@@ -1,9 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// °Ñ×´Ì¬Ôİ´æ£¬µÈÎïÀíÖ¡¹ıÀ´À­
+// æŠŠçŠ¶æ€æš‚å­˜ï¼Œç­‰ç‰©ç†å¸§è¿‡æ¥æ‹‰
 public class StoreOnlyController : BaseController
 {
     public float verticalAxisDeadZone = .6f;
@@ -14,17 +14,17 @@ public class StoreOnlyController : BaseController
     private int _triggerbitset = 0;
     private float _horizon = 0f;
 
-    // ´¥·¢
+    // è§¦å‘
     public void SetUp() { _triggerbitset |= up; }
     public void SetDown() { _triggerbitset |= down; }
 
-    // ³¤Ñ¹
+    // é•¿å‹
     public void SetFire() { _keybitset |= GetBit(KeyType.FIRE); }
     public void UnsetFire() { _keybitset &= ~GetBit(KeyType.FIRE); }
     public void SetBomb() { _keybitset |= GetBit(KeyType.BOMB); }
     public void UnsetBomb() { _keybitset &= ~GetBit(KeyType.BOMB); }
 
-    // ¸¡µã£¨Î£
+    // æµ®ç‚¹ï¼ˆå±
     public void SetHorizon(float h) { _horizon = h; }
 
     public override void OnLogicFrameUpdate() { }
@@ -35,11 +35,11 @@ public class StoreOnlyController : BaseController
     {
         if ((_triggerbitset & up) > 0)
         {
-            _triggerbitset &= ~up; // ´¥·¢Æ÷£¬Ö»Ïû·ÑÒ»´Î£¬ÏÂ´Î¾ÍµÃÖØĞÂ´¥·¢
+            _triggerbitset &= ~up; // è§¦å‘å™¨ï¼Œåªæ¶ˆè´¹ä¸€æ¬¡ï¼Œä¸‹æ¬¡å°±å¾—é‡æ–°è§¦å‘
             return true;
         }
         return false;
-    } // ÌøÔ¾±ğÖ§³Ö³¤Ñº
+    } // è·³è·ƒåˆ«æ”¯æŒé•¿æŠ¼
 
     public override bool OnDown()
     {

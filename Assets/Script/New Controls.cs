@@ -33,7 +33,7 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
                     ""id"": ""12409e67-8435-4dcd-b859-d40a69425413"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -42,7 +42,7 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
                     ""id"": ""aae125ec-1711-4b09-968d-ee1244f49681"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -56,18 +56,18 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Fire"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""2225bd57-3ba5-4f7d-b383-21b55cf84e5d"",
-                    ""expectedControlType"": ""Integer"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Bomb"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""254dfb2d-2976-4096-8120-ca620a8a0827"",
-                    ""expectedControlType"": ""Integer"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -336,13 +336,8 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
             ""bindingGroup"": ""JS"",
             ""devices"": [
                 {
-                    ""devicePath"": ""<Joystick>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                },
-                {
                     ""devicePath"": ""<Gamepad>"",
-                    ""isOptional"": false,
+                    ""isOptional"": true,
                     ""isOR"": false
                 }
             ]
@@ -353,7 +348,7 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": false,
+                    ""isOptional"": true,
                     ""isOR"": false
                 }
             ]

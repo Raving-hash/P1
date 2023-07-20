@@ -135,7 +135,7 @@ public class PlayerPhysicalController : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         ctrl.OnLogicFrameUpdate();
         vertical_state = VerticalSM[(int)vertical_state](this); // 处理纵向物理层逻辑

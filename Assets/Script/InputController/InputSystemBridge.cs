@@ -24,26 +24,26 @@ public class InputSystemBridge : MonoBehaviour
     {
         //if (_physicalCtrl != null)
         //{
-            var v = context.ReadValue<float>();
-            Debug.Log("Horizontal" + v);
-            _physicalCtrl.ctrl.SetHorizon(v);
+        var v = context.ReadValue<float>();
+        Debug.Log("Horizontal" + v);
+        _physicalCtrl.ctrl.SetHorizon(v);
         //}
     }
     // 触发
     public void Jump(InputAction.CallbackContext context)
     {
-        if (_physicalCtrl != null)
+        if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("Jump" + context);
-            _physicalCtrl.ctrl.SetUp(); // 触发操作，所以不判回弹
+            //Debug.Log("Jump" + context);
+            _physicalCtrl.ctrl.SetUp(); // 触发操作，所以不判回弹}
         }
     }
 
     public void Down(InputAction.CallbackContext context)
     {
-        if (_physicalCtrl != null)
+        if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("Down" + context);
+            //Debug.Log("Down" + context);
             _physicalCtrl.ctrl.SetDown(); // 触发操作，所以不判回弹
         }
     }
@@ -51,28 +51,18 @@ public class InputSystemBridge : MonoBehaviour
     // 长压
     public void Fire(InputAction.CallbackContext context)
     {
-        if (_physicalCtrl != null)
-        {
-            int is_fire = context.ReadValue<int>();
-            Debug.Log("Fire" + context + is_fire);
-            if (is_fire > 0)
-                _physicalCtrl.ctrl.SetFire();
-            else
-                _physicalCtrl.ctrl.UnsetFire();
-        }
+        if (context.phase == InputActionPhase.Started)
+            _physicalCtrl.ctrl.SetFire();
+        else if(context.phase == InputActionPhase.Canceled)
+            _physicalCtrl.ctrl.UnsetFire();
     }
 
     public void Bomb(InputAction.CallbackContext context)
     {
-        if (_physicalCtrl != null)
-        {
-            int is_bomb = context.ReadValue<int>();
-            Debug.Log("Bomb" + context + is_bomb);
-            if (is_bomb > 0)
-                _physicalCtrl.ctrl.SetBomb();
-            else
-                _physicalCtrl.ctrl.UnsetBomb();
-        }
+        if (context.phase == InputActionPhase.Started)
+            _physicalCtrl.ctrl.SetBomb();
+        else if (context.phase == InputActionPhase.Canceled)
+            _physicalCtrl.ctrl.UnsetBomb();
     }
 
 

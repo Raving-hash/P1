@@ -27,25 +27,25 @@ public class BaseController
     public virtual bool OnDown() { return false; }
     public virtual float Horizon() { return 0f; } // [-1, 1]
 
-    public static BaseController ControllerFactory(string controllerid, string[] joysticknames)
-    {
-        if (controllerid.StartsWith("j"))
-        {
-            int id = int.Parse(controllerid[1..]); // C#里类似py的slice写法
-            return new JoyStickInputController(id, joysticknames[id - 1]); // 手柄，id从1开始，所以拿下标要-1
-        }
-        else if(controllerid.StartsWith("k"))
-        {
-            int id = int.Parse(controllerid[1..]);
-            switch (id)
-            {
-                case 1:
-                    return new KeyboardInputControllerDefault1();
-                case 2:
-                //default:
-                    return new KeyboardInputControllerDefault2();
-            }
-        }
-        throw new System.Exception($"Unexpected key {controllerid} detected at BaseController.cs");
-    }
+    //public static BaseController ControllerFactory(string controllerid, string[] joysticknames)
+    //{
+    //    if (controllerid.StartsWith("j"))
+    //    {
+    //        int id = int.Parse(controllerid[1..]); // C#里类似py的slice写法
+    //        return new JoyStickInputController(id, joysticknames[id - 1]); // 手柄，id从1开始，所以拿下标要-1
+    //    }
+    //    else if(controllerid.StartsWith("k"))
+    //    {
+    //        int id = int.Parse(controllerid[1..]);
+    //        switch (id)
+    //        {
+    //            case 1:
+    //                return new KeyboardInputControllerDefault1();
+    //            case 2:
+    //            //default:
+    //                return new KeyboardInputControllerDefault2();
+    //        }
+    //    }
+    //    throw new System.Exception($"Unexpected key {controllerid} detected at BaseController.cs");
+    //}
 }
