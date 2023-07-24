@@ -11,4 +11,4 @@
 
 # 疑难杂症
 
-报错缺少com.unity.feature.2d包：Package商店用Unity Registry搜一下2d这个包，装好之后**重启**一下Unity
+报错缺少com.unity.feature.2d包：Window -> Package Manager用Unity Registry搜一下2d这个包，装好之后**重启**一下Unity
