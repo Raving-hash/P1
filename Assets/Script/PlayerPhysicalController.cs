@@ -10,11 +10,11 @@ public class PlayerPhysicalController : MonoBehaviour
     public int GetPlayerID() { return PlayerID; }
 
     Animator animator;
+
+    public Controls constants;
     // Start is called before the first frame update
     public StoreOnlyController ctrl = new StoreOnlyController(); // 如果还没被JoiningGame放进来，则开一个空输入的BaseController，这样我们就不用判空了
 
-    public static float ground_height = -3f;
-    public static float kill_height = -100f;
 
     public GameObject default_weapon_prefab;
     WeaponBase current_weapon;
@@ -24,21 +24,11 @@ public class PlayerPhysicalController : MonoBehaviour
         current_weapon = weapon.GetComponent<WeaponBase>();
         animator = GetComponent<Animator>();
         velocity = Vector3.zero;
-        transform.position = new Vector3(transform.position.x, ground_height, transform.position.z);
+        transform.position = new Vector3(transform.position.x, constants.groundHeight, transform.position.z);
     }
-
-    float horizontal_velocity = 0f;
-    public float horizontal_accelare = 5f;
-    public float horizontal_velocity_limit = 10f;
-    float friction = 0.95f; // 无操作时趋向停止
-    public static float gravity = 0.1f;
-
 
     //int orientation; // 
     Vector3 velocity;
-
-    public static float jump_rate1 = 10f;
-    public static float jump_rate2 = 6f;
 
     int floating_jump_ctr = 0;
     public int floating_jump_cnt_limit = 1; // 支持后续的多段跳道具
@@ -54,15 +44,15 @@ public class PlayerPhysicalController : MonoBehaviour
         (obj) => { // 0号GROUNDED
             if (obj.ctrl.OnUp())
             {
-                obj.velocity.y += jump_rate1;
+                obj.velocity.y += obj.constants.jumpForce1;
                 obj.animator.SetBool("is_grounded", false);
                 obj.animator.SetFloat("vertical_v", obj.velocity.y);
                 return VerticalStateCode.FLOATING;
             }
             // 检测踏空逻辑
-            if(ground_height < obj.transform.position.y)
+            if(obj.constants.groundHeight < obj.transform.position.y)
             {
-                obj.velocity.y -= gravity;
+                obj.velocity.y -= obj.constants.gravity;
                 obj.animator.SetBool("is_grounded", false);
                 obj.animator.SetFloat("vertical_v", obj.velocity.y);
                 return VerticalStateCode.FLOATING;
@@ -71,9 +61,9 @@ public class PlayerPhysicalController : MonoBehaviour
         },
         (obj) => {  // FLOATING
             // 检测着地逻辑
-            if(ground_height >= obj.transform.position.y)
+            if(obj.constants.groundHeight >= obj.transform.position.y)
             {
-                obj.transform.position = new Vector3(obj.transform.position.x, ground_height, obj.transform.position.z);
+                obj.transform.position = new Vector3(obj.transform.position.x, obj.constants.groundHeight, obj.transform.position.z);
                 obj.velocity.y = 0f;
                 obj.animator.SetFloat("vertical_v", obj.velocity.y);
                 obj.animator.SetBool("is_grounded", true);
@@ -83,9 +73,9 @@ public class PlayerPhysicalController : MonoBehaviour
             if (obj.ctrl.OnUp() && obj.floating_jump_ctr < obj.floating_jump_cnt_limit)
             {
                 ++obj.floating_jump_ctr;
-                obj.velocity.y = Mathf.Max(obj.velocity.y + jump_rate1, jump_rate1);
+                obj.velocity.y = Mathf.Max(obj.velocity.y + obj.constants.jumpForce2, obj.constants.jumpForce2);
             }
-            obj.velocity.y -= gravity;
+            obj.velocity.y -= obj.constants.gravity;
             obj.animator.SetFloat("vertical_v", obj.velocity.y);
             return VerticalStateCode.FLOATING;
         },
@@ -121,10 +111,10 @@ public class PlayerPhysicalController : MonoBehaviour
         }
         else
             animator.SetBool("is_moving", false);
-        velocity.x *= friction;
+        velocity.x *= constants.frictionRate;
         velocity.x += movement;
-        velocity.x = Mathf.Max(-horizontal_velocity_limit, velocity.x);
-        velocity.x = Mathf.Min(horizontal_velocity_limit, velocity.x);
+        velocity.x = Mathf.Max(-constants.horizontalVelocityLimit, velocity.x);
+        velocity.x = Mathf.Min(constants.horizontalVelocityLimit, velocity.x);
     }
 
     void FireHandler()
@@ -142,7 +132,7 @@ public class PlayerPhysicalController : MonoBehaviour
         HorizontalMovementHandler();
         FireHandler();
         // 应用移动
-        transform.Translate(velocity * Time.deltaTime);
+        transform.Translate(velocity * Time.fixedDeltaTime);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
