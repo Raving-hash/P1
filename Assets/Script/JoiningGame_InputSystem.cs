@@ -25,8 +25,8 @@ public class JoiningGame_InputSystem : MonoBehaviour
         }
 
         // Check for A button on connected gamepads to join a Player with Joystick preset
-        Debug.Log(Gamepad.all.Count);
-        Debug.Log("Joystick:"+Joystick.all.Count);
+        //Debug.Log(Gamepad.all.Count);
+        //Debug.Log("Joystick:"+Joystick.all.Count);
         foreach (var gamepad in Gamepad.all)
         {
             Debug.Log("Gamepad:" + gamepad + ", A Down:" + gamepad.aButton.wasPressedThisFrame);
