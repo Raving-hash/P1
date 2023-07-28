@@ -12,3 +12,9 @@
 # 疑难杂症
 
 报错缺少com.unity.feature.2d包：Window -> Package Manager用Unity Registry搜一下2d这个包，装好之后**重启**一下Unity
+
+# 项目多开
+
+1. 修改本项目根目录下的make_link.bat的CURRENT_DIR为本项目绝对路径，TARGET_DIR为一个与本项目路径不同的比较方便的路径
+2. 管理员身份运行make_link.bat
+3. UnityHub从磁盘添加TARGET_DIR的工程，然后启动Editor
