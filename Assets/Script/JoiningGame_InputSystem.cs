@@ -47,6 +47,8 @@ public class JoiningGame_InputSystem : MonoBehaviour
             pairWithDevice: device
         );
 
+        var singleton = FindFirstObjectByType<LocalSingleton>();
+        singleton.localUser.CmdJoinPlayer(controlScheme);
 
         // Add the device to the joinedDevices list
         if (device != null)

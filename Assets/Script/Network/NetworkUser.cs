@@ -13,7 +13,8 @@ public class NetworkUser : NetworkBehaviour
     // Server stuff
     // 服务器每帧都发一个指令，客户端等指令到了再tick
     List<FrameOperation> ServersideOperationsBuffer;
-    Hashtable ServersideOperationsHistory;
+    List<FrameOperation> ServersideOperationsHistory;
+    Hashtable ServersideOperationsHistoryByUser;
 
     uint frameID;
 
@@ -22,6 +23,7 @@ public class NetworkUser : NetworkBehaviour
     {
         ServersideOperationsBuffer.Clear();
         ServersideOperationsHistory.Clear();
+        ServersideOperationsHistoryByUser.Clear();
         frameID = 0;
     }
 
@@ -30,6 +32,8 @@ public class NetworkUser : NetworkBehaviour
     {
         ++frameID;
         RpcServerTick(ServersideOperationsBuffer);
+        foreach (var x in ServersideOperationsBuffer)
+            ServersideOperationsHistory.Add(x);
         ServersideOperationsBuffer.Clear();
     }
 
@@ -55,10 +59,10 @@ public class NetworkUser : NetworkBehaviour
         FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.JOIN, frameID);
 
         Hashtable user_ht;
-        if (ServersideOperationsHistory.ContainsKey(netID))
-            user_ht = (Hashtable)ServersideOperationsHistory[netID];
+        if (ServersideOperationsHistoryByUser.ContainsKey(netID))
+            user_ht = (Hashtable)ServersideOperationsHistoryByUser[netID];
         else
-            ServersideOperationsHistory[netID] = user_ht = new Hashtable();
+            ServersideOperationsHistoryByUser[netID] = user_ht = new Hashtable();
         List<FrameOperation> player_ht;
         if (user_ht.ContainsKey(deviceID))
             player_ht = (List<FrameOperation>)user_ht[deviceID];
@@ -77,7 +81,7 @@ public class NetworkUser : NetworkBehaviour
          */
         uint netID = NetworkClient.connection.identity.netId;
 
-        foreach(DictionaryEntry playerEntry in (Hashtable)ServersideOperationsHistory[netID])
+        foreach(DictionaryEntry playerEntry in (Hashtable)ServersideOperationsHistoryByUser[netID])
         {
             string deviceID = (string)playerEntry.Key;
             FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.EXIT, frameID);
@@ -86,7 +90,7 @@ public class NetworkUser : NetworkBehaviour
         }
         //if(ServersideOperationsHistory.ContainsKey(netID))
             //ServersideOperationsHistory.
-        RpcLogoutPlayer(netID);
+        //RpcLogoutPlayer(netID);
     }
 
     [Command]
@@ -96,7 +100,7 @@ public class NetworkUser : NetworkBehaviour
 
         FrameOperation fopr = new FrameOperation(opr, frameID);
         ServersideOperationsBuffer.Add(fopr);
-        ((List<FrameOperation>)((Hashtable)ServersideOperationsHistory[netID])[opr.deviceID]).Add(fopr);
+        ((List<FrameOperation>)((Hashtable)ServersideOperationsHistoryByUser[netID])[opr.deviceID]).Add(fopr);
     }
 
     //[Command]
@@ -110,28 +114,32 @@ public class NetworkUser : NetworkBehaviour
 
     // Client stuff
 
+    LocalSingleton singleton;
+
     [TargetRpc]
-    public void RpcInitAllPlayerFromServer(NetworkConnectionToClient target, Hashtable history)
+    public void RpcInitAllPlayerFromServer(NetworkConnectionToClient target, List<FrameOperation>history)
     {
-        var singleton = FindFirstObjectByType<LocalSingleton>();
-        singleton.localRepo.;
+        singleton.InitAllPlayer(history);
     }
 
     // 在服务端调用该方法，然后通过Rpc发送消息给所有客户端
     [ClientRpc]
     public void RpcServerTick(List<FrameOperation> buffer)
     {
-        Debug.Log($"Client Recv buffer len: {buffer.Count}");
-
+        if(isLocalPlayer)
+        {
+            Debug.Log($"Client Recv buffer len: {buffer.Count}");
+            singleton.BatchTick(buffer);
+        }
     }
 
-    [ClientRpc]
-    public void RpcLogoutPlayer(uint netId)
-    {
-        if (NetworkClient.connection.identity.netId == netId)
-            return;
-        _repo.LogoutPlayer(netId);
-    }
+    //[ClientRpc]
+    //public void RpcLogoutPlayer(uint netId)
+    //{
+    //    if (NetworkClient.connection.identity.netId == netId)
+    //        return;
+    //    _repo.LogoutPlayer(netId);
+    //}
 
     public override void OnStopClient()
     {
@@ -148,20 +156,20 @@ public class NetworkUser : NetworkBehaviour
         id = NetworkClient.connection.identity;
         if(isLocalPlayer)
         {
-            var singleton = FindFirstObjectByType<LocalSingleton>();
-            _repo = singleton.localRepo;
+            singleton = FindFirstObjectByType<LocalSingleton>();
             singleton.localUser = this;
+            Debug.Log("Singleton init!" + singleton.localFrameID + " " + singleton.localUser);
         }
         
-        Debug.Log($"Repo: {_repo}");
         Debug.Log("Net ID:" + id.netId);
     }
 
     public override void OnStartServer()
     {
         base.OnStartServer();
-        ServersideOperationsHistory = new Hashtable();
+        ServersideOperationsHistoryByUser = new Hashtable();
         ServersideOperationsBuffer = new List<FrameOperation>();
+        ServersideOperationsHistory = new List<FrameOperation>();
         ResetServer();
     }
 

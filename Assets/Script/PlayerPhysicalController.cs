@@ -125,10 +125,10 @@ public class PlayerPhysicalController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        Tick(Time.fixedDeltaTime);
-    }
+    //void FixedUpdate()
+    //{
+    //    Tick(Time.fixedDeltaTime);
+    //}
 
     // 刷入ctrl，传入deltaTime即可更新物理状态，所有的物理逻辑开始于此处
     public void Tick(float deltaTime)

@@ -15,6 +15,7 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
     private void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
+        Debug.Log("Input Scheme:"+_playerInput.currentControlScheme);
         var _singleton = FindFirstObjectByType<LocalSingleton>();
         _user = _singleton.localUser;
     }
@@ -48,6 +49,7 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
     // ³¤Ñ¹
     public void Fire(InputAction.CallbackContext context)
     {
+        Debug.Log("Fire holding");
         if (context.phase == InputActionPhase.Started)
             _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, KeyType.FIRE_KEYDOWN));
         else if (context.phase == InputActionPhase.Canceled)
