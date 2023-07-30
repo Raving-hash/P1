@@ -1,6 +1,6 @@
-@REM 这里改成你的目标目录
-set "TARGET_DIR=C:\Users\ATRI\P2"
-set "CURRENT_DIR=C:\Users\ATRI\P1"
+@REM 锟斤拷锟斤拷某锟斤拷锟斤拷目锟斤拷目录
+set "TARGET_DIR=C:\Users\Administrator\Documents\P2"
+set "CURRENT_DIR=C:\Users\Administrator\Documents\P1"
 
 del %TARGET_DIR%
 mkdir %TARGET_DIR%

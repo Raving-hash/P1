@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 用了InputSystem之后这个实际上只有StoreOnlyController在起作用，其它类都是用来支持InputManager的
 public class BaseController
 {
     public BaseController() { }
     public virtual void OnLogicFrameUpdate() { }
-    protected int _keybitset = 0;
+    public int keyset = 0; // 开放给Operation使用
 
-    protected int GetBit(KeyType t) { return (int)(1 << (int)t); }
-    protected bool GetBitStatus(KeyType t) { return (_keybitset & (int)(1 << (int)t)) > 0; }
+    public static int GetBit(KeyType t) { return (int)(1 << (int)t); }
+    protected bool GetBitStatus(KeyType t) { return (keyset & (int)(1 << (int)t)) > 0; }
 
     // 修改bitset，用于支持长押
     protected void BindKey(KeyCode c, KeyType t)
     {
-        if (Input.GetKeyDown(c)) _keybitset |= GetBit(t);
-        else if (Input.GetKeyUp(c)) _keybitset &= (int)~GetBit(t);
+        if (Input.GetKeyDown(c)) keyset |= GetBit(t);
+        else if (Input.GetKeyUp(c)) keyset &= (int)~GetBit(t);
     }
 
     public virtual bool OnExitDown() { return false; }

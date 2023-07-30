@@ -127,14 +127,21 @@ public class PlayerPhysicalController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Tick(Time.fixedDeltaTime);
+    }
+
+    // 刷入ctrl，传入deltaTime即可更新物理状态，所有的物理逻辑开始于此处
+    public void Tick(float deltaTime)
+    {
         ctrl.OnLogicFrameUpdate();
         vertical_state = VerticalSM[(int)vertical_state](this); // 处理纵向物理层逻辑
         HorizontalMovementHandler();
         FireHandler();
         // 应用移动
-        transform.Translate(velocity * Time.fixedDeltaTime);
+        transform.Translate(velocity * deltaTime);
     }
 
+    // 这个需要换掉
     void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Triggered" + collision.gameObject.name);

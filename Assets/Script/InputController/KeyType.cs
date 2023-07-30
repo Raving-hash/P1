@@ -6,8 +6,16 @@ public enum KeyType : int
 {
     FIRE,
     BOMB,
-    LEFT,
-    RIGHT
+    //LEFT,
+    //RIGHT,
+    UP,
+    DOWN,
+    FIRE_KEYDOWN,
+    FIRE_KEYUP,
+    BOMB_KEYDOWN,
+    BOMB_KEYUP,
+    JOIN,
+    EXIT
 }
 
 /*
