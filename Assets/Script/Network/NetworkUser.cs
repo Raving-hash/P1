@@ -12,35 +12,23 @@ public class NetworkUser : NetworkBehaviour
 {
     // Server stuff
     // 服务器每帧都发一个指令，客户端等指令到了再tick
-    static List<FrameOperation> ServersideOperationsBuffer;
-    static List<FrameOperation> ServersideOperationsHistory;
-    static Hashtable ServersideOperationsHistoryByUser;
+    //ServerSingleton ss;
 
-    static uint frameID;
-    static bool readyToTick = false;
-    static bool isInit = false;
+    
 
-    [Server]
-    void ResetServer()
-    {
-        ServersideOperationsBuffer.Clear();
-        ServersideOperationsHistory.Clear();
-        ServersideOperationsHistoryByUser.Clear();
-        frameID = 1;
-    }
     [Server]
     private void FixedUpdate()
     {
-        if (isServer && readyToTick)
+        if (isServer && ss.readyToTick)
         {
-            Debug.LogWarning($"queue len:{ServersideOperationsBuffer.Count}, history len:{ServersideOperationsHistory.Count}");
-            if (ServersideOperationsBuffer.Count == 0)
-                ServersideOperationsBuffer.Add(new FrameOperation(0, "None", KeyType.EMPTY_FRAME, frameID));
-            RpcServerTick(ServersideOperationsBuffer);
-            foreach (var x in ServersideOperationsBuffer)
-                ServersideOperationsHistory.Add(x);
-            ServersideOperationsBuffer.Clear();
-            ++frameID;
+            Debug.LogWarning($"queue len:{ss.ServersideOperationsBuffer.Count}, history len:{ss.ServersideOperationsHistory.Count}");
+            foreach (var x in ss.ServersideOperationsBuffer)
+                ss.ServersideOperationsHistory.Add(x);
+            if (ss.ServersideOperationsBuffer.Count == 0)
+                ss.ServersideOperationsBuffer.Add(new FrameOperation(0, "None", KeyType.EMPTY_FRAME, ss.frameID));
+            RpcServerTick(ss.ServersideOperationsBuffer);
+            ss.ServersideOperationsBuffer.Clear();
+            ++ss.frameID;
         }
     }
 
@@ -51,8 +39,8 @@ public class NetworkUser : NetworkBehaviour
     [Command]
     public void CmdFetchAll()
     {
-        Debug.Log($"fetchall to netid:{NetworkClient.connection.identity.netId}, queue len:{ServersideOperationsHistory.Count}");
-        RpcInitAllPlayerFromServer(connectionToClient, ServersideOperationsHistory);
+        Debug.Log($"fetchall to netid:{NetworkClient.connection.identity.netId}, queue len:{ss.ServersideOperationsHistory.Count}");
+        RpcInitAllPlayerFromServer(connectionToClient, ss.ServersideOperationsHistory);
     }
 
     /*
@@ -63,20 +51,20 @@ public class NetworkUser : NetworkBehaviour
     public void CmdJoinPlayer(string deviceID)
     {
         uint netID = NetworkClient.connection.identity.netId;
-        FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.JOIN, frameID);
+        FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.JOIN, ss.frameID);
 
         Hashtable user_ht;
-        if (ServersideOperationsHistoryByUser.ContainsKey(netID))
-            user_ht = (Hashtable)ServersideOperationsHistoryByUser[netID];
+        if (ss.ServersideOperationsHistoryByUser.ContainsKey(netID))
+            user_ht = (Hashtable)ss.ServersideOperationsHistoryByUser[netID];
         else
-            ServersideOperationsHistoryByUser[netID] = user_ht = new Hashtable();
+            ss.ServersideOperationsHistoryByUser[netID] = user_ht = new Hashtable();
         List<FrameOperation> player_ht;
         if (user_ht.ContainsKey(deviceID))
             player_ht = (List<FrameOperation>)user_ht[deviceID];
         else
             user_ht[deviceID] = player_ht = new List<FrameOperation>();
         player_ht.Add(fopr);
-        ServersideOperationsBuffer.Add(fopr);
+        ss.ServersideOperationsBuffer.Add(fopr);
     }
 
     [Command]
@@ -88,12 +76,12 @@ public class NetworkUser : NetworkBehaviour
          */
         uint netID = NetworkClient.connection.identity.netId;
 
-        foreach (DictionaryEntry playerEntry in (Hashtable)ServersideOperationsHistoryByUser[netID])
+        foreach (DictionaryEntry playerEntry in (Hashtable)ss.ServersideOperationsHistoryByUser[netID])
         {
             string deviceID = (string)playerEntry.Key;
-            FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.EXIT, frameID);
+            FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.EXIT, ss.frameID);
             ((List<FrameOperation>)playerEntry.Value).Add(fopr);
-            ServersideOperationsBuffer.Add(fopr);
+            ss.ServersideOperationsBuffer.Add(fopr);
         }
         //if(ServersideOperationsHistory.ContainsKey(netID))
         //ServersideOperationsHistory.
@@ -104,29 +92,26 @@ public class NetworkUser : NetworkBehaviour
     public void CmdPushOperation(Operation opr)
     {
         uint netID = NetworkClient.connection.identity.netId;
-        FrameOperation fopr = new FrameOperation(opr, frameID);
-        ServersideOperationsBuffer.Add(fopr);
-        ((List<FrameOperation>)((Hashtable)ServersideOperationsHistoryByUser[netID])[opr.deviceID]).Add(fopr);
+        FrameOperation fopr = new FrameOperation(opr, ss.frameID);
+        ss.ServersideOperationsBuffer.Add(fopr);
+        ((List<FrameOperation>)((Hashtable)ss.ServersideOperationsHistoryByUser[netID])[opr.deviceID]).Add(fopr);
     }
 
-    void Awake()
-    {
-        if(!isInit)
-        {
-            ServersideOperationsHistoryByUser = new Hashtable();
-            ServersideOperationsBuffer = new List<FrameOperation>();
-            ServersideOperationsHistory = new List<FrameOperation>();
-            isInit = true;
-        }
-    }
+    //void Awake()
+    //{
+    //    if(!isInit)
+    //    {
+    //        isInit = true;
+    //    }
+    //}
 
     public override void OnStartServer()
     {
         base.OnStartServer();
         if (isServer)
         {
-            ResetServer();
-            readyToTick = true;
+            ss = FindFirstObjectByType<ServerSingleton>();
+            ss.ResetServer();
         }
     }
 
