@@ -21,12 +21,12 @@ public class LocalSingleton : MonoBehaviour
                 localRepo.TickAllPlayer(Time.fixedDeltaTime);
                 ++localFrameID;
             }
-            Debug.Log("fopr:" + fopr.keyset);
+            //Debug.Log("fopr:" + fopr.keyset);
             if ((fopr.keyset & BaseController.GetBit(KeyType.JOIN)) > 0)
             {
                 var pd = localRepo.RegisterPlayer(playerPrefab, fopr.netID, fopr.deviceID);
-                Debug.Log("after reg player cnt:" + localRepo.players.Count);
-                Debug.Log("REG ARG:" + fopr.netID + " " + fopr.deviceID);
+                //Debug.Log("after reg player cnt:" + localRepo.players.Count);
+                //Debug.Log("REG ARG:" + fopr.netID + " " + fopr.deviceID);
 
             }
             else if ((fopr.keyset & BaseController.GetBit(KeyType.EXIT)) > 0)
@@ -36,12 +36,10 @@ public class LocalSingleton : MonoBehaviour
             else
             {
                 var pd = localRepo.GetPlayerDict(fopr.netID, fopr.deviceID);
-                Debug.Log("player cnt:" + localRepo.players.Count + pd.prefab);
-                Debug.Log("CTRL ARG:" + fopr.netID + " " + fopr.deviceID);
+                //Debug.Log("player cnt:" + localRepo.players.Count + pd.prefab);
+                //Debug.Log("CTRL ARG:" + fopr.netID + " " + fopr.deviceID);
                 var physical_ctrl = pd.prefab.GetComponent<PlayerPhysicalController>();
-                Debug.Log("player physical_ctrl:" + physical_ctrl);
-
-
+                //Debug.Log("player physical_ctrl:" + physical_ctrl);
                 physical_ctrl.ctrl.keyset = fopr.keyset;
                 physical_ctrl.ctrl.SetHorizon(fopr.horizontal);
             }
@@ -51,22 +49,7 @@ public class LocalSingleton : MonoBehaviour
 
     public void InitAllPlayer(List<FrameOperation> history)
     {
-        Debug.Log("init all player:" + history.Count);
         BatchTick(history);
-        //foreach (DictionaryEntry user_entry in history)
-        //{
-        //    uint netID = (uint)user_entry.Key;
-        //    Hashtable user_ht = (Hashtable)user_entry.Value;
-        //    foreach (DictionaryEntry player_entry in user_ht)
-        //    {
-        //        string deviceID = (string)player_entry.Key;
-        //        List<FrameOperation> li = (List<FrameOperation>)player_entry.Value;
-        //        var pd = localRepo.RegisterPlayer(playerPrefab, netID, deviceID);
-        //        pd.operationArray = li;
-        //        localRepo.localOperationBuffer.AddRange(li);
-        //    }
-        //}
-        //localRepo.localOperationBuffer.Sort((x, y) => { return (int)x.frameID - (int)y.frameID; });
     }
 
     public void CmdPushOperation(Operation _opr)

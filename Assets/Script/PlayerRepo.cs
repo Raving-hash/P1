@@ -5,46 +5,37 @@ using UnityEngine;
 
 public class PlayerRepo
 {
-    // {
-    //      netID(uint):{
-    //          deviceID(str): PlayerDict
-    //      }
-    // }
-    public Hashtable players = new Hashtable();
-    // {
-    //      netID(uint):{
-    //          ID(str): [{}]
-    //      }
-    // }
-    //public List<FrameOperation> localOperationBuffer;
+    public Dictionary<uint, Dictionary<string, PlayerDict>> players = new();
 
     public PlayerDict GetPlayerDict(uint netID, string deviceID)
     {
-        Hashtable player_netid;
+        Dictionary<string, PlayerDict> player_netid;
         if (!players.ContainsKey(netID))
-            players[netID] = player_netid = new Hashtable();
+            players[netID] = player_netid = new Dictionary<string, PlayerDict>();
         else
-            player_netid = (Hashtable)players[netID];
+            player_netid = players[netID];
 
         PlayerDict pd;
         if (!player_netid.ContainsKey(deviceID))
             player_netid[deviceID] = pd = new PlayerDict();
         else
-            pd = (PlayerDict)player_netid[deviceID];
+            pd = player_netid[deviceID];
         return pd;
     }
 
     public void TickAllPlayer(float deltaTime)
     {
-        foreach (DictionaryEntry user_entry in players)
+        foreach (var user_entry in players)
         {
-            uint netID = (uint)user_entry.Key;
-            Hashtable user_ht = (Hashtable)user_entry.Value;
-            foreach (DictionaryEntry player_entry in user_ht)
+            uint netID = user_entry.Key;
+            Dictionary<string, PlayerDict> user_ht = user_entry.Value;
+            foreach (var player_entry in user_ht)
             {
-                string deviceID = (string)player_entry.Key;
-                PlayerDict pd = (PlayerDict)player_entry.Value;
-                pd.prefab.GetComponent<PlayerPhysicalController>().Tick(deltaTime);
+                string deviceID = player_entry.Key;
+                PlayerDict pd = player_entry.Value;
+                var ctrl = pd.prefab.GetComponent<PlayerPhysicalController>();
+                ctrl.Tick(deltaTime);
+                ctrl.ctrl.RefreshTriggers();
             }
         }
     }
@@ -61,25 +52,10 @@ public class PlayerRepo
         var pd = GetPlayerDict(netID, deviceID);
         if (pd.prefab != null)
             GameObject.Destroy(pd.prefab);
-        Hashtable user_ht = (Hashtable)players[netID];
+        Dictionary<string, PlayerDict> user_ht = players[netID];
         user_ht.Remove(deviceID);
         if (user_ht.Count == 0)
             players.Remove(netID);
         return pd;
     }
-
-    //public void BatchTick()
-    //{
-    //    foreach(FrameOperation fopr in localOperationBuffer)
-    //    {
-
-    //        var pd = GetPlayerDict(fopr.netID, fopr.deviceID);
-
-    //    }
-    //}
-
-    //public void LogoutPlayer(uint netId)
-    //{
-
-    //}
 }

@@ -27,8 +27,9 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
 
         var v = context.ReadValue<float>();
         Debug.Log("Horizontal" + v);
-        if (v != 0)
-            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, v));
+        //if (v != 0)
+        // 键盘似乎只在值变化的时候会Push
+        _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, v));
     }
     // 触发
     public void Jump(InputAction.CallbackContext context)

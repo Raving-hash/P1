@@ -34,7 +34,7 @@ public class KCPServer : NetworkManager
 
     private void ServerTick()
     {
-        Debug.LogWarning($"queue len:{ServerOPBuffer.Count}, history len:{ServerOPHistory.Count}");
+        //Debug.LogWarning($"queue len:{ServerOPBuffer.Count}, history len:{ServerOPHistory.Count}");
         foreach (var x in ServerOPBuffer)
             ServerOPHistory.Add(x);
         if (ServerOPBuffer.Count == 0)
@@ -95,8 +95,8 @@ public class KCPServer : NetworkManager
         ServerOPHistory = new List<FrameOperation>();
         ServerUserDevices = new Dictionary<uint, List<string>>();
         ResetServer();
-        InvokeRepeating(nameof(ServerTick), 0f, 0.5f); // 常量记得外提
-        Debug.LogWarning("CUSTOM SERVER STARTED");
+        InvokeRepeating(nameof(ServerTick), 0f, 0.03f); // 常量记得外提
+        //Debug.LogWarning("CUSTOM SERVER STARTED");
     }
 
     public override void OnStopServer()
@@ -107,6 +107,7 @@ public class KCPServer : NetworkManager
 
     // Client
     LocalSingleton lst;
+    public GameObject localListener;
 
     public void RpcFetchAll(RespFetchAll resp)
     {
@@ -122,6 +123,7 @@ public class KCPServer : NetworkManager
     {
         base.OnClientConnect();
         lst = FindFirstObjectByType<LocalSingleton>();
+        GameObject.Instantiate(localListener); // 监听键盘加入玩家
         NetworkClient.RegisterHandler<RespFetchAll>(RpcFetchAll);
         NetworkClient.RegisterHandler<RespServerTick>(RpcServerTick);
         NetworkClient.Send<RequestFetchAll>(new RequestFetchAll());

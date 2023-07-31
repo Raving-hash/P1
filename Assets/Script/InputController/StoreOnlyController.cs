@@ -6,22 +6,26 @@ using UnityEngine.InputSystem;
 // 把状态暂存，等物理帧过来拉
 public class StoreOnlyController : BaseController
 {
-    public float verticalAxisDeadZone = .6f;
-
-    //const int down = 0b10;
-    //const int up = 0b1;
-
-    //private int _triggerbitset = 0;
     private float _horizon = 0f;
 
     // 触发
     public void SetUp() { keyset |= GetBit(KeyType.UP); }
     public void SetDown() { keyset |= GetBit(KeyType.DOWN); }
 
-    //public void ResetTriggers()
-    //{
-    //    keyset &= ~(GetBit(KeyType.FIRE_KEYDOWN) | GetBit(KeyType.FIRE_KEYUP) | GetBit(KeyType.BOMB_KEYDOWN) | GetBit(KeyType.BOMB_KEYUP));
-    //}
+    public void RefreshTriggers()
+    {
+        if (OnFireKeyDown()) keyset |= GetBit(KeyType.FIRE);
+        if (OnFireKeyUp()) keyset &= ~GetBit(KeyType.FIRE); 
+        if (OnBombKeyDown()) keyset |= GetBit(KeyType.BOMB);
+        if (OnBombKeyUp()) keyset &= ~GetBit(KeyType.BOMB);
+        keyset &= ~(GetBit(KeyType.FIRE_KEYDOWN)
+            | GetBit(KeyType.FIRE_KEYUP)
+            | GetBit(KeyType.BOMB_KEYDOWN)
+            | GetBit(KeyType.BOMB_KEYUP)
+            | GetBit(KeyType.UP)
+            | GetBit(KeyType.DOWN));
+        //_horizon = 0f;
+    }
 
     // 长压
     public void SetFire() { keyset |= GetBit(KeyType.FIRE); }
@@ -50,9 +54,9 @@ public class StoreOnlyController : BaseController
 
     public override bool OnDown() { return OnTrigger(KeyType.DOWN); }
 
-    public bool OnFireKeyDown() { return OnTrigger(KeyType.FIRE_KEYDOWN); }
-    public bool OnFireKeyUp() { return OnTrigger(KeyType.FIRE_KEYUP); }
-    public bool OnBombKeyDown() { return OnTrigger(KeyType.BOMB_KEYDOWN); }
-    public bool OnBombKeyUp() { return OnTrigger(KeyType.BOMB_KEYUP); }
+    bool OnFireKeyDown() { return OnTrigger(KeyType.FIRE_KEYDOWN); }
+    bool OnFireKeyUp() { return OnTrigger(KeyType.FIRE_KEYUP); }
+    bool OnBombKeyDown() { return OnTrigger(KeyType.BOMB_KEYDOWN); }
+    bool OnBombKeyUp() { return OnTrigger(KeyType.BOMB_KEYUP); }
 
 }

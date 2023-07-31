@@ -40,7 +40,7 @@ public class JoiningGame_InputSystem : MonoBehaviour
     private void JoinPlayer(int playerIndex, string controlScheme, InputDevice device, string deviceID)
     {
         // Create a new PlayerInput instance for the player
-        Debug.Log("New player:" + controlScheme + ", Device:" + device);
+        //Debug.Log("New player:" + controlScheme + ", Device:" + device);
         PlayerInput playerInput = PlayerInput.Instantiate(
             prefab: HeroPrefab, // Replace with your player prefab if needed
             controlScheme: controlScheme,
@@ -49,7 +49,7 @@ public class JoiningGame_InputSystem : MonoBehaviour
 
         var singleton = FindFirstObjectByType<LocalSingleton>();
         playerInput.gameObject.GetComponent<InputSystemBridgeForNetwork>().deviceID = deviceID;
-        Debug.Log("DEVICEID:"+ deviceID);
+        //Debug.Log("DEVICEID:"+ deviceID);
         singleton.CmdJoinPlayer(deviceID);
 
         // Add the device to the joinedDevices list
