@@ -8,20 +8,20 @@ using UnityEngine.InputSystem.Users;
 
 public class JoiningGame_InputSystem : MonoBehaviour
 {
-    Hashtable joinedDevices = new Hashtable();
+    Dictionary<InputDevice, List<string>> joinedDevices = new Dictionary<InputDevice, List<string>>();
     public GameObject HeroPrefab;
 
     void Update()
     {// Check for J key to join Player 1 with Keyboard1 preset
-        if (Keyboard.current.jKey.wasPressedThisFrame && !(joinedDevices.ContainsKey(Keyboard.current) && ((List<int>)joinedDevices[Keyboard.current]).Contains(0)))
+        if (Keyboard.current.jKey.wasPressedThisFrame && !(joinedDevices.ContainsKey(Keyboard.current) && (joinedDevices[Keyboard.current]).Contains("KB0")))
         {
-            JoinPlayer(joinedDevices.Count, "KB", Keyboard.current, 0);
+            JoinPlayer(joinedDevices.Count, "KB", Keyboard.current, "KB0");
         }
 
         // Check for . key to join Player 2 with Keyboard2 preset
-        if (Keyboard.current.periodKey.wasPressedThisFrame && !(joinedDevices.ContainsKey(Keyboard.current) && ((List<int>)joinedDevices[Keyboard.current]).Contains(1)))
+        if (Keyboard.current.periodKey.wasPressedThisFrame && !(joinedDevices.ContainsKey(Keyboard.current) && (joinedDevices[Keyboard.current]).Contains("KB1")))
         {
-            JoinPlayer(joinedDevices.Count, "KB2", Keyboard.current, 1);
+            JoinPlayer(joinedDevices.Count, "KB2", Keyboard.current, "KB1");
         }
 
         // Check for A button on connected gamepads to join a Player with Joystick preset
@@ -30,14 +30,14 @@ public class JoiningGame_InputSystem : MonoBehaviour
         foreach (var gamepad in Gamepad.all)
         {
             Debug.Log("Gamepad:" + gamepad + ", A Down:" + gamepad.aButton.wasPressedThisFrame);
-            if (gamepad.aButton.wasPressedThisFrame && !joinedDevices.Contains(gamepad))
+            if (gamepad.aButton.wasPressedThisFrame && !joinedDevices.ContainsKey(gamepad))
             {
-                JoinPlayer(joinedDevices.Count, "JS", gamepad);
+                JoinPlayer(joinedDevices.Count, "JS", gamepad, gamepad.displayName);
             }
         }
     }
 
-    private void JoinPlayer(int playerIndex, string controlScheme, InputDevice device = null, int playerID = 0)
+    private void JoinPlayer(int playerIndex, string controlScheme, InputDevice device, string deviceID)
     {
         // Create a new PlayerInput instance for the player
         Debug.Log("New player:" + controlScheme + ", Device:" + device);
@@ -48,14 +48,16 @@ public class JoiningGame_InputSystem : MonoBehaviour
         );
 
         var singleton = FindFirstObjectByType<LocalSingleton>();
-        singleton.localUser.CmdJoinPlayer(controlScheme);
+        playerInput.GetComponent<PlayerPhysicalController>().deviceID = deviceID;
+        Debug.Log("DEVICEID:"+ deviceID);
+        singleton.CmdJoinPlayer(deviceID);
 
         // Add the device to the joinedDevices list
         if (device != null)
         {
             if (!joinedDevices.ContainsKey(device))
-                joinedDevices.Add(device, new List<int>());
-            ((List<int>)joinedDevices[device]).Add(playerID);
+                joinedDevices.Add(device, new List<string>());
+            (joinedDevices[device]).Add(deviceID);
         }
     }
 

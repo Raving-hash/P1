@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
 public class InputSystemBridgeForNetwork : MonoBehaviour
 {
-    private PlayerInput _playerInput;
-    //private LocalSingleton _singleton;
+    private PlayerPhysicalController ctrl;
+    private LocalSingleton _singleton;
 
-    private NetworkUser _user;
+    //private NetworkUser _user;
+
 
     // Start is called before the first frame update
     private void Awake()
     {
-        _playerInput = GetComponent<PlayerInput>();
-        Debug.Log("Input Scheme:"+_playerInput.currentControlScheme);
-        var _singleton = FindFirstObjectByType<LocalSingleton>();
-        _user = _singleton.localUser;
+        ctrl = GetComponent<PlayerPhysicalController>();
+        Debug.Log("DEVICE:"+ctrl.deviceID);
+        _singleton = FindFirstObjectByType<LocalSingleton>();
+        //_user = _singleton.localUser;
     }
 
     public void Horizontal(InputAction.CallbackContext context)
@@ -26,7 +28,7 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
         Debug.Log("Horizontal" + v);
         if (v != 0)
         {
-            _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, v));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, ctrl.deviceID, v));
         }
     }
     // 触发
@@ -34,7 +36,7 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, KeyType.UP));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, ctrl.deviceID, KeyType.UP));
         }
     }
 
@@ -42,7 +44,7 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, KeyType.DOWN));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, ctrl.deviceID, KeyType.DOWN));
         }
     }
 
@@ -51,17 +53,17 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
     {
         Debug.Log("Fire holding");
         if (context.phase == InputActionPhase.Started)
-            _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, KeyType.FIRE_KEYDOWN));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, ctrl.deviceID, KeyType.FIRE_KEYDOWN));
         else if (context.phase == InputActionPhase.Canceled)
-            _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, KeyType.FIRE_KEYUP));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, ctrl.deviceID, KeyType.FIRE_KEYUP));
     }
 
     public void Bomb(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
-            _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, KeyType.BOMB_KEYDOWN));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, ctrl.deviceID, KeyType.BOMB_KEYDOWN));
         else if (context.phase == InputActionPhase.Canceled)
-            _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, KeyType.BOMB_KEYUP));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, ctrl.deviceID, KeyType.BOMB_KEYUP));
     }
 
 

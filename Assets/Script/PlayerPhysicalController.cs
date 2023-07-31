@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 // 负责处理角色的物理逻辑，动画状态机应该参照本脚本
 public class PlayerPhysicalController : MonoBehaviour
 {
-    public int PlayerID;
-    public int GetPlayerID() { return PlayerID; }
+    public string deviceID;
 
     Animator animator;
 
