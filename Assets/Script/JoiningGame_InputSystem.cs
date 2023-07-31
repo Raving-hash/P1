@@ -48,7 +48,7 @@ public class JoiningGame_InputSystem : MonoBehaviour
         );
 
         var singleton = FindFirstObjectByType<LocalSingleton>();
-        playerInput.GetComponent<PlayerPhysicalController>().deviceID = deviceID;
+        playerInput.gameObject.GetComponent<InputSystemBridgeForNetwork>().deviceID = deviceID;
         Debug.Log("DEVICEID:"+ deviceID);
         singleton.CmdJoinPlayer(deviceID);
 
