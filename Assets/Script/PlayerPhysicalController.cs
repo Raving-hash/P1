@@ -138,10 +138,10 @@ public class PlayerPhysicalController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Triggered" + collision.gameObject.name);
-        if(collision.gameObject.name.Contains("bullet"))
+        BulletBase bulletBase = collision.gameObject.GetComponent<BulletBase>();
+        if(bulletBase)
         {
-            BulletNormal bullet = collision.gameObject.GetComponent<BulletNormal>();
-            velocity.x += bullet.orientation * bullet.hitback;
+            velocity.x += bulletBase.orientation * bulletBase.hitBack;
             Destroy(collision.gameObject);
         }
     }
