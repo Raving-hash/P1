@@ -11,7 +11,7 @@ public class LocalSingleton : MonoBehaviour
 
     public void BatchTick(List<FrameOperation> buf)
     {
-        Debug.Log("batch tick:" + buf.Count);
+        Debug.Log($"batch tick cnt:{buf.Count}, localframe:{localFrameID}");
         // 特判JOIN和EXIT两个操作
         foreach (var fopr in buf)
         {
@@ -22,7 +22,10 @@ public class LocalSingleton : MonoBehaviour
             }
             Debug.Log("fopr:" + fopr.keyset);
             if ((fopr.keyset & BaseController.GetBit(KeyType.JOIN)) > 0)
-                localRepo.RegisterPlayer(playerPrefab, fopr.netID, fopr.deviceID);
+            {
+                var pd = localRepo.RegisterPlayer(playerPrefab, fopr.netID, fopr.deviceID);
+                Debug.Log("after reg player cnt:" + localRepo.players.Count);
+            }
             else if ((fopr.keyset & BaseController.GetBit(KeyType.EXIT)) > 0)
                 localRepo.DestroyPlayer(fopr.netID, fopr.deviceID);
             else if ((fopr.keyset & BaseController.GetBit(KeyType.EMPTY_FRAME)) > 0)
@@ -30,6 +33,7 @@ public class LocalSingleton : MonoBehaviour
             else
             {
                 var pd = localRepo.GetPlayerDict(fopr.netID, fopr.deviceID);
+                Debug.Log("player cnt:" + localRepo.players.Count);
                 var physical_ctrl = pd.prefab.GetComponent<PlayerPhysicalController>();
                 physical_ctrl.ctrl.keyset = fopr.keyset;
                 physical_ctrl.ctrl.SetHorizon(fopr.horizontal);

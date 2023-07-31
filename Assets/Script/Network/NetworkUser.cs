@@ -12,11 +12,13 @@ public class NetworkUser : NetworkBehaviour
 {
     // Server stuff
     // 服务器每帧都发一个指令，客户端等指令到了再tick
-    List<FrameOperation> ServersideOperationsBuffer;
-    List<FrameOperation> ServersideOperationsHistory;
-    Hashtable ServersideOperationsHistoryByUser;
+    static List<FrameOperation> ServersideOperationsBuffer;
+    static List<FrameOperation> ServersideOperationsHistory;
+    static Hashtable ServersideOperationsHistoryByUser;
 
-    uint frameID;
+    static uint frameID;
+    static bool readyToTick = false;
+    static bool isInit = false;
 
     [Server]
     void ResetServer()
@@ -26,13 +28,12 @@ public class NetworkUser : NetworkBehaviour
         ServersideOperationsHistoryByUser.Clear();
         frameID = 1;
     }
-
     [Server]
     private void FixedUpdate()
     {
-        if(isServer)
+        if (isServer && readyToTick)
         {
-            Debug.LogWarning("queue len:" + ServersideOperationsBuffer.Count);
+            Debug.LogWarning($"queue len:{ServersideOperationsBuffer.Count}, history len:{ServersideOperationsHistory.Count}");
             if (ServersideOperationsBuffer.Count == 0)
                 ServersideOperationsBuffer.Add(new FrameOperation(0, "None", KeyType.EMPTY_FRAME, frameID));
             RpcServerTick(ServersideOperationsBuffer);
@@ -50,7 +51,8 @@ public class NetworkUser : NetworkBehaviour
     [Command]
     public void CmdFetchAll()
     {
-        RpcInitAllPlayerFromServer(NetworkClient.connection.identity.connectionToClient, ServersideOperationsHistory);
+        Debug.Log($"fetchall to netid:{NetworkClient.connection.identity.netId}, queue len:{ServersideOperationsHistory.Count}");
+        RpcInitAllPlayerFromServer(connectionToClient, ServersideOperationsHistory);
     }
 
     /*
@@ -60,7 +62,6 @@ public class NetworkUser : NetworkBehaviour
     [Command]
     public void CmdJoinPlayer(string deviceID)
     {
-        
         uint netID = NetworkClient.connection.identity.netId;
         FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.JOIN, frameID);
 
@@ -87,7 +88,7 @@ public class NetworkUser : NetworkBehaviour
          */
         uint netID = NetworkClient.connection.identity.netId;
 
-        foreach(DictionaryEntry playerEntry in (Hashtable)ServersideOperationsHistoryByUser[netID])
+        foreach (DictionaryEntry playerEntry in (Hashtable)ServersideOperationsHistoryByUser[netID])
         {
             string deviceID = (string)playerEntry.Key;
             FrameOperation fopr = new FrameOperation(netID, deviceID, KeyType.EXIT, frameID);
@@ -95,7 +96,7 @@ public class NetworkUser : NetworkBehaviour
             ServersideOperationsBuffer.Add(fopr);
         }
         //if(ServersideOperationsHistory.ContainsKey(netID))
-            //ServersideOperationsHistory.
+        //ServersideOperationsHistory.
         //RpcLogoutPlayer(netID);
     }
 
@@ -103,19 +104,31 @@ public class NetworkUser : NetworkBehaviour
     public void CmdPushOperation(Operation opr)
     {
         uint netID = NetworkClient.connection.identity.netId;
-
         FrameOperation fopr = new FrameOperation(opr, frameID);
         ServersideOperationsBuffer.Add(fopr);
         ((List<FrameOperation>)((Hashtable)ServersideOperationsHistoryByUser[netID])[opr.deviceID]).Add(fopr);
     }
 
-    //[Command]
-    //public void CmdSendMessageToServer(string message)
-    //{
-    //    // 在服务端收到消息后，广播该消息给所有客户端
-    //    Debug.Log($"Server: [{message}] from {NetworkClient.connection.identity.netId}");
-    //    RpcBroadcast(message);
-    //}
+    void Awake()
+    {
+        if(!isInit)
+        {
+            ServersideOperationsHistoryByUser = new Hashtable();
+            ServersideOperationsBuffer = new List<FrameOperation>();
+            ServersideOperationsHistory = new List<FrameOperation>();
+            isInit = true;
+        }
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        if (isServer)
+        {
+            ResetServer();
+            readyToTick = true;
+        }
+    }
 
 
     // Client stuff
@@ -123,16 +136,20 @@ public class NetworkUser : NetworkBehaviour
     LocalSingleton singleton;
 
     [TargetRpc]
-    public void RpcInitAllPlayerFromServer(NetworkConnectionToClient target, List<FrameOperation>history)
+    public void RpcInitAllPlayerFromServer(NetworkConnectionToClient target, List<FrameOperation> history)
     {
-        singleton.InitAllPlayer(history);
+        if (isLocalPlayer)
+        {
+            Debug.Log("PULL FROM SERVER:" + target + ", history len:" + history.Count);
+            singleton.InitAllPlayer(history);
+        }
     }
 
     // 在服务端调用该方法，然后通过Rpc发送消息给所有客户端
     [ClientRpc]
     public void RpcServerTick(List<FrameOperation> buffer)
     {
-        if(isLocalPlayer)
+        if (isLocalPlayer)
         {
             Debug.Log($"Client Recv buffer len: {buffer.Count}");
             singleton.BatchTick(buffer);
@@ -149,36 +166,22 @@ public class NetworkUser : NetworkBehaviour
 
     public override void OnStopClient()
     {
-        base.OnStopClient();
-        CmdBroadcastLogout();
+        if (isLocalPlayer)
+        {
+            base.OnStopClient();
+            CmdBroadcastLogout();
+        }
     }
-
-
-    NetworkIdentity id;
 
 
     public override void OnStartClient()
     {
-        id = NetworkClient.connection.identity;
-        if(isLocalPlayer)
+        if (isLocalPlayer)
         {
             singleton = FindFirstObjectByType<LocalSingleton>();
             singleton.localUser = this;
-            Debug.Log("Singleton init!" + singleton.localFrameID + " " + singleton.localUser);
+            Debug.Log("Singleton init!frameid:" + singleton.localFrameID + " localuserid:" + singleton.localUser.netId);
+            CmdFetchAll();
         }
-        
-        Debug.Log("Net ID:" + id.netId);
     }
-
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        ServersideOperationsHistoryByUser = new Hashtable();
-        ServersideOperationsBuffer = new List<FrameOperation>();
-        ServersideOperationsHistory = new List<FrameOperation>();
-        ResetServer();
-    }
-
-
-
 }

@@ -18,7 +18,7 @@ public class PlayerPhysicalController : MonoBehaviour
 
     public GameObject default_weapon_prefab;
     WeaponBase current_weapon;
-    void Start()
+    void Awake()
     {
         GameObject weapon = Instantiate(default_weapon_prefab.gameObject, transform);
         current_weapon = weapon.GetComponent<WeaponBase>();
