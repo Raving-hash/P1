@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,7 +29,7 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
             _user.CmdPushOperation(new Operation(_user.netId, _playerInput.currentControlScheme, v));
         }
     }
-    // ¥•∑¢
+    // Ëß¶Âèë
     public void Jump(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -46,7 +46,7 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
         }
     }
 
-    // ≥§—π
+    // ÈïøÂéã
     public void Fire(InputAction.CallbackContext context)
     {
         Debug.Log("Fire holding");

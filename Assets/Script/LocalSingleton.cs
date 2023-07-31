@@ -1,4 +1,4 @@
-using System.Collections;
+锘縰sing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ public class LocalSingleton : MonoBehaviour
 
     public void BatchTick(List<FrameOperation> buf)
     {
-        // 特判JOIN和EXIT两个操作
+        // 鐗瑰垽JOIN鍜孍XIT涓や釜鎿嶄綔
         foreach (var fopr in buf)
         {
             while (localFrameID < fopr.frameID)
