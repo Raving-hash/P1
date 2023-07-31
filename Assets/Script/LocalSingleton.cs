@@ -11,6 +11,7 @@ public class LocalSingleton : MonoBehaviour
 
     public void BatchTick(List<FrameOperation> buf)
     {
+        Debug.Log("batch tick:" + buf.Count);
         // 特判JOIN和EXIT两个操作
         foreach (var fopr in buf)
         {
@@ -19,10 +20,13 @@ public class LocalSingleton : MonoBehaviour
                 localRepo.TickAllPlayer(Time.fixedDeltaTime);
                 ++localFrameID;
             }
-            if ((fopr.keyset | BaseController.GetBit(KeyType.JOIN)) > 0)
+            Debug.Log("fopr:" + fopr.keyset);
+            if ((fopr.keyset & BaseController.GetBit(KeyType.JOIN)) > 0)
                 localRepo.RegisterPlayer(playerPrefab, fopr.netID, fopr.deviceID);
-            else if ((fopr.keyset | BaseController.GetBit(KeyType.EXIT)) > 0)
+            else if ((fopr.keyset & BaseController.GetBit(KeyType.EXIT)) > 0)
                 localRepo.DestroyPlayer(fopr.netID, fopr.deviceID);
+            else if ((fopr.keyset & BaseController.GetBit(KeyType.EMPTY_FRAME)) > 0)
+                continue;
             else
             {
                 var pd = localRepo.GetPlayerDict(fopr.netID, fopr.deviceID);
@@ -36,6 +40,7 @@ public class LocalSingleton : MonoBehaviour
 
     public void InitAllPlayer(List<FrameOperation> history)
     {
+        Debug.Log("init all player:" + history.Count);
         BatchTick(history);
         //foreach (DictionaryEntry user_entry in history)
         //{

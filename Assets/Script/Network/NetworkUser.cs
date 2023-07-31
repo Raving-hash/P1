@@ -24,17 +24,23 @@ public class NetworkUser : NetworkBehaviour
         ServersideOperationsBuffer.Clear();
         ServersideOperationsHistory.Clear();
         ServersideOperationsHistoryByUser.Clear();
-        frameID = 0;
+        frameID = 1;
     }
 
     [Server]
     private void FixedUpdate()
     {
-        ++frameID;
-        RpcServerTick(ServersideOperationsBuffer);
-        foreach (var x in ServersideOperationsBuffer)
-            ServersideOperationsHistory.Add(x);
-        ServersideOperationsBuffer.Clear();
+        if(isServer)
+        {
+            Debug.LogWarning("queue len:" + ServersideOperationsBuffer.Count);
+            if (ServersideOperationsBuffer.Count == 0)
+                ServersideOperationsBuffer.Add(new FrameOperation(0, "None", KeyType.EMPTY_FRAME, frameID));
+            RpcServerTick(ServersideOperationsBuffer);
+            foreach (var x in ServersideOperationsBuffer)
+                ServersideOperationsHistory.Add(x);
+            ServersideOperationsBuffer.Clear();
+            ++frameID;
+        }
     }
 
     /*

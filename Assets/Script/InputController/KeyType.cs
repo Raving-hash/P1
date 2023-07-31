@@ -15,7 +15,8 @@ public enum KeyType : int
     BOMB_KEYDOWN,
     BOMB_KEYUP,
     JOIN,
-    EXIT
+    EXIT,
+    EMPTY_FRAME // 本帧为空操作，按原样tick即可
 }
 
 /*
