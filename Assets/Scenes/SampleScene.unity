@@ -260,6 +260,7 @@ MonoBehaviour:
   spawnPrefabs: []
   snapshotSettings:
     bufferTimeMultiplier: 2
+    bufferLimit: 32
     catchupNegativeThreshold: -1
     catchupPositiveThreshold: 1
     catchupSpeed: 0.019999999552965164
@@ -268,6 +269,7 @@ MonoBehaviour:
     dynamicAdjustment: 1
     dynamicAdjustmentTolerance: 1
     deliveryTimeEmaDuration: 2
+  connectionQualityInterval: 3
   timeInterpolationGui: 0
 --- !u!4 &512850206
 Transform:
@@ -622,6 +624,70 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1001 &1349941707
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093457642558116904, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018130091351209228, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      propertyPath: m_Name
+      value: Pistol
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8018130091351209228, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1740098975}
+  m_SourcePrefab: {fileID: 100100000, guid: d72be96c8bd61364498951ac7546137e, type: 3}
 --- !u!1 &1718507074
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,3 +756,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1740098971 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8018130091351209228, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+  m_PrefabInstance: {fileID: 1349941707}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &1740098975
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740098971}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

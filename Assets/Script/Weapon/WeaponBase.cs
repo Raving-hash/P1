@@ -31,8 +31,10 @@ public class WeaponBase : MonoBehaviour
     protected virtual void Fire(Transform transform, float orientation)
     {
         GameObject bullet = Instantiate(bullet_prefab, transform.position + orientation * new Vector3(.5f,0,0), transform.rotation);
-        BulletNormal bullet_physics = bullet.GetComponent<BulletNormal>();
-        
-        bullet_physics.init(new Vector3(bullet_speed * orientation, 0f, 0f), orientation, hitback);
+        BulletBase bulletModel = BulletFactory.CreateBullet("Pistol");
+        bulletModel.init(bullet,orientation);
+        // BulletNormal bullet_physics = bullet.GetComponent<BulletNormal>();
+
+        // bullet_physics.init(new Vector3(bullet_speed * orientation, 0f, 0f), orientation, hitback);
     }
 }
