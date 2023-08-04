@@ -243,7 +243,7 @@ Transform:
   m_Children:
   - {fileID: 6563702514455500352}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4196026877175253547
 SpriteRenderer:
@@ -405,6 +405,7 @@ MonoBehaviour:
   PlayerID: 0
   constants: {fileID: 11400000, guid: c59a7be4b80821843bfbc6415287e8b7, type: 2}
   default_weapon_prefab: {fileID: 2112534196463791616, guid: 02636af39f6cf9347958eab97e329dda, type: 3}
+  Rifle: {fileID: 6546505755877518730, guid: 980564cf98fdd52429f3da02e1c092a6, type: 3}
   floating_jump_cnt_limit: 1
 --- !u!114 &7684051673031476508
 MonoBehaviour:

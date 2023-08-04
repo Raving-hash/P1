@@ -12,15 +12,15 @@ public class BulletFactory : MonoBehaviour
         switch(bulletType)
         {
             case "Pistol":
-                return bullet.AddComponent<Pistol>();
+                return bullet.AddComponent<PistolBullet>();
             case "Rifle":
-                return bullet.AddComponent<Rifle>();
+                return bullet.AddComponent<RifleBullet>();
             case "SMG":
-                return bullet.AddComponent<SMG>();
+                return bullet.AddComponent<SMGBullet>();
             case "ShotGun":
-                return bullet.AddComponent<ShotGun>();
+                return bullet.AddComponent<ShotGunBullet>();
             case "Sniper":
-                return bullet.AddComponent<Sniper>();
+                return bullet.AddComponent<SniperBullet>();
             default:
                 throw new ArgumentException("Invalid weapon type.");
         }

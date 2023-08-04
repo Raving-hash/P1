@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3165527641470363282}
   - component: {fileID: 7971992895507897435}
-  - component: {fileID: 7107260708665623975}
+  - component: {fileID: 2666635706456129037}
   m_Layer: 0
   m_Name: pistol
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7107260708665623975
+--- !u!114 &2666635706456129037
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,7 +94,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2112534196463791616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3ba65ab038f6d042b7c9b1da6f2eba7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2037732f5e871e245b34ab2dcdc59ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletCount: 30
+  bulletMaxCount: 30
   bullet_prefab: {fileID: 8018130091351209228, guid: d72be96c8bd61364498951ac7546137e, type: 3}
+  next_shot_time: 0

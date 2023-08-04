@@ -15,13 +15,22 @@ public class PlayerPhysicalController : MonoBehaviour
     // Start is called before the first frame update
     public StoreOnlyController ctrl = new StoreOnlyController(); // 如果还没被JoiningGame放进来，则开一个空输入的BaseController，这样我们就不用判空了
 
-
+    //prefab
     public GameObject default_weapon_prefab;
+    public GameObject Rifle;
     WeaponBase current_weapon;
+    WeaponBase another_weapon;
+    GameObject current_weapon_go;
+    GameObject another_weapon_go;
     void Start()
     {
-        GameObject weapon = Instantiate(default_weapon_prefab.gameObject, transform);
-        current_weapon = weapon.GetComponent<WeaponBase>();
+        //武器初始化
+        current_weapon_go = Instantiate(default_weapon_prefab.gameObject, transform);
+        another_weapon_go = Instantiate(Rifle.gameObject, transform);
+        current_weapon = current_weapon_go.GetComponent<WeaponBase>();
+        another_weapon = another_weapon_go.GetComponent<WeaponBase>();
+        current_weapon_go.SetActive(true);
+        another_weapon_go.SetActive(false);
         animator = GetComponent<Animator>();
         velocity = Vector3.zero;
         transform.position = new Vector3(transform.position.x, constants.groundHeight, transform.position.z);
@@ -117,24 +126,46 @@ public class PlayerPhysicalController : MonoBehaviour
         velocity.x = Mathf.Min(constants.horizontalVelocityLimit, velocity.x);
     }
 
-    void FireHandler()
-    {
-        if (ctrl.OnFire() && current_weapon.TryFire(transform, orientation))
-        {
-            velocity.x -= orientation * current_weapon.anti_impulse;
-        }
-    }
-
     void FixedUpdate()
     {
         ctrl.OnLogicFrameUpdate();
         vertical_state = VerticalSM[(int)vertical_state](this); // 处理纵向物理层逻辑
         HorizontalMovementHandler();
         FireHandler();
+        ChangeWeapon(false);
         // 应用移动
         transform.Translate(velocity * Time.fixedDeltaTime);
     }
 
+    //---------------------------武器子弹相关-------------------------------------------//
+    void FireHandler()
+    {
+        if (ctrl.OnFire() && current_weapon.TryFire(transform, orientation))
+        {
+            velocity.x -= orientation * current_weapon.anti_impulse;
+            if (current_weapon.CheckBulletCount()) 
+            {
+                DestoryCurrentWeapon();
+                ChangeWeapon(true);
+            }
+        }
+    }
+    //暂时用丢炸弹代替切枪(待修改)
+    void ChangeWeapon(bool isSystem)
+    {
+        if (isSystem || ctrl.OnBomb())
+        {
+            Swap(ref current_weapon,ref another_weapon);
+            Swap(ref current_weapon_go,ref another_weapon_go);
+            if (!current_weapon_go) 
+            {
+                current_weapon_go = Instantiate(default_weapon_prefab.gameObject, transform);
+                current_weapon = current_weapon_go.GetComponent<WeaponBase>();
+            }
+            current_weapon_go.SetActive(true);
+            if(another_weapon_go) another_weapon_go.SetActive(false);
+        }
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Triggered" + collision.gameObject.name);
@@ -144,5 +175,36 @@ public class PlayerPhysicalController : MonoBehaviour
             velocity.x += bulletBase.orientation * bulletBase.hitBack;
             Destroy(collision.gameObject);
         }
+        //捡到箱子(todo)
+        BoxBase boxBase = collision.gameObject.GetComponent<BoxBase>();
+        if(boxBase)
+        {
+            //需要一个工厂类用来造出各种武器道具(暂时都是步枪)
+            GetNewWeapon(Rifle);
+            Destroy(collision.gameObject);
+        }
+    }
+    void GetNewWeapon(GameObject NewWeapon)
+    {
+        if(!another_weapon_go) ChangeWeapon(true);
+        DestoryCurrentWeapon();
+        current_weapon_go = Instantiate(NewWeapon.gameObject, transform);
+        current_weapon = current_weapon_go.GetComponent<WeaponBase>();
+        current_weapon_go.SetActive(true);
+    }
+
+    void DestoryCurrentWeapon()
+    {
+        Destroy(current_weapon_go);
+        current_weapon = null;
+    }
+
+    //---------------------------common-------------------------------------------//
+    static void Swap<T>(ref T lhs, ref T rhs)
+    {
+        T temp;
+        temp = lhs;
+        lhs = rhs;
+        rhs = temp;
     }
 }

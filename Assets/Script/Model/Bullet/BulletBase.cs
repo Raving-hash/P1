@@ -14,29 +14,19 @@ public abstract class BulletBase : MonoBehaviour
     public float hitBack{get; private set;}// 击退冲量
     private Rigidbody2D rbody;//子弹刚体
 
-    public void init(GameObject bullet,float _orientation)
+    public virtual void init(GameObject bullet,float _orientation)
     {
         rbody = bullet.GetComponent<Rigidbody2D>();
         rbody.velocity = new Vector3(speed * _orientation, 0f, 0f);
+        // rbody.rotation = _orientation;
         orientation = _orientation;
-        hitBack = 2f;
+
+        hitBack = 12f;
         DestroySelf(bullet);
     }
     //根据子弹销毁时间来销毁子弹
     void DestroySelf(GameObject bullet)
     {
         Destroy(bullet,destructionTime);
-    }
-    //子弹碰到带有玩家控制的脚本物体会自动销毁()
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        PlayerPhysicalController pc = other.gameObject.GetComponent<PlayerPhysicalController>();
-        if(pc==null) return ;
-        CalcHitback(pc,hitBack);
-        Destroy(this.gameObject);
-    }
-    void CalcHitback(PlayerPhysicalController pc,float hitBack)
-    {
-
     }
 }
