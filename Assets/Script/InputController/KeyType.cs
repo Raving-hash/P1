@@ -7,7 +7,9 @@ public enum KeyType : int
     FIRE,
     BOMB,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
 }
 
 /*
