@@ -45,6 +45,7 @@ ExportedObj
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
+*.sai2
 sysinfo.txt
 *.apk
 *.unitypackage
