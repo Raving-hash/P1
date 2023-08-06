@@ -10,10 +10,11 @@ public class PlayerPhysicalController : MonoBehaviour
     public int GetPlayerID() { return PlayerID; }
 
     Animator animator;
+    public GlobalVar gv;
 
     public Controls constants;
     // Start is called before the first frame update
-    public StoreOnlyController ctrl = new StoreOnlyController(); // 如果还没被JoiningGame放进来，则开一个空输入的BaseController，这样我们就不用判空了
+    public StoreOnlyController ctrl; // 如果还没被JoiningGame放进来，则开一个空输入的BaseController，这样我们就不用判空了
 
     //prefab
     public GameObject default_weapon_prefab;
@@ -22,6 +23,12 @@ public class PlayerPhysicalController : MonoBehaviour
     WeaponBase another_weapon;
     GameObject current_weapon_go;
     GameObject another_weapon_go;
+
+    private void Awake()
+    {
+        ctrl = new(gv);
+    }
+
     void Start()
     {
         //武器初始化
@@ -128,7 +135,7 @@ public class PlayerPhysicalController : MonoBehaviour
 
     void FixedUpdate()
     {
-        ctrl.OnLogicFrameUpdate();
+        //ctrl.OnLogicFrameUpdate();
         vertical_state = VerticalSM[(int)vertical_state](this); // 处理纵向物理层逻辑
         HorizontalMovementHandler();
         FireHandler();
