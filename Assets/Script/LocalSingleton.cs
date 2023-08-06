@@ -22,16 +22,15 @@ public class LocalSingleton : MonoBehaviour
                 ++localFrameID;
             }
             //Debug.Log("fopr:" + fopr.keyset);
-            if ((fopr.keyset & BaseController.GetBit(KeyType.JOIN)) > 0)
+            if ((fopr.keyset & StoreOnlyController.GetBit(KeyType.JOIN)) > 0)
             {
                 var pd = localRepo.RegisterPlayer(playerPrefab, fopr.netID, fopr.deviceID);
                 //Debug.Log("after reg player cnt:" + localRepo.players.Count);
                 //Debug.Log("REG ARG:" + fopr.netID + " " + fopr.deviceID);
-
             }
-            else if ((fopr.keyset & BaseController.GetBit(KeyType.EXIT)) > 0)
+            else if ((fopr.keyset & StoreOnlyController.GetBit(KeyType.EXIT)) > 0)
                 localRepo.DestroyPlayer(fopr.netID, fopr.deviceID);
-            else if ((fopr.keyset & BaseController.GetBit(KeyType.EMPTY_FRAME)) > 0)
+            else if ((fopr.keyset & StoreOnlyController.GetBit(KeyType.EMPTY_FRAME)) > 0)
                 continue;
             else
             {
@@ -40,7 +39,8 @@ public class LocalSingleton : MonoBehaviour
                 //Debug.Log("CTRL ARG:" + fopr.netID + " " + fopr.deviceID);
                 var physical_ctrl = pd.prefab.GetComponent<PlayerPhysicalController>();
                 //Debug.Log("player physical_ctrl:" + physical_ctrl);
-                physical_ctrl.ctrl.keyset = fopr.keyset;
+                // physical_ctrl.ctrl.keyset = fopr.keyset;
+                physical_ctrl.ctrl.ConvertNetworkOperation(fopr.keyset);
                 physical_ctrl.ctrl.SetHorizon(fopr.horizontal);
             }
 

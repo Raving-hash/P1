@@ -36,15 +36,18 @@ public class InputSystemBridgeForNetwork : MonoBehaviour
     {
         if (deviceID == null) return;
         if (context.phase == InputActionPhase.Started)
-            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, KeyType.UP));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, KeyType.UP_KEYDOWN));
+        else if (context.phase == InputActionPhase.Canceled)
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, KeyType.UP_KEYUP));
     }
 
     public void Down(InputAction.CallbackContext context)
     {
         if (deviceID == null) return;
-
         if (context.phase == InputActionPhase.Started)
-            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, KeyType.DOWN));
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, KeyType.DOWN_KEYDOWN));
+        else if (context.phase == InputActionPhase.Canceled)
+            _singleton.CmdPushOperation(new Operation(NetworkClient.connection.identity.netId, deviceID, KeyType.DOWN_KEYUP));
     }
 
     // 长压

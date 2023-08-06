@@ -9,15 +9,23 @@ public class PlayerPhysicalController : MonoBehaviour
     public string deviceID;
 
     Animator animator;
+    // public GlobalVar gv;
 
     public Controls constants;
     // Start is called before the first frame update
-    public StoreOnlyController ctrl = new StoreOnlyController(); // 如果还没被JoiningGame放进来，则开一个空输入的BaseController，这样我们就不用判空了
+    public StoreOnlyController ctrl;
 
 
     public GameObject default_weapon_prefab;
     WeaponBase current_weapon;
-    void Awake()
+
+    private void Awake()
+    {
+        // ctrl = new(gv);
+        ctrl = new();
+    }
+
+    void Start()
     {
         GameObject weapon = Instantiate(default_weapon_prefab.gameObject, transform);
         current_weapon = weapon.GetComponent<WeaponBase>();
@@ -132,7 +140,7 @@ public class PlayerPhysicalController : MonoBehaviour
     // 刷入ctrl，传入deltaTime即可更新物理状态，所有的物理逻辑开始于此处
     public void Tick(float deltaTime)
     {
-        ctrl.OnLogicFrameUpdate();
+        //ctrl.OnLogicFrameUpdate();
         vertical_state = VerticalSM[(int)vertical_state](this); // 处理纵向物理层逻辑
         HorizontalMovementHandler();
         FireHandler();
