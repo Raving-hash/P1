@@ -23,6 +23,7 @@
 
 Assets/AIGC/ 下的资产为使用AI做游戏资产生成的一些尝试，生成参数可以从png的meta信息中找到。这些内容在资源可以稳定使用后我们补上模型来源。
 
+## map
 map_torii:
 ```
 Game Icon Institute, Game Scene, (extremely detailed CG unity 8k wallpaper),(masterpiece:1.4), (best quality:1.3), (ultra-detailed), (best illustration),(best shadow), (an extremely delicate and beautiful:1.2), finely detail, eastern building structure, 2D, sunrise background, multiple platform, Torii, landscaoe, wide_shot, cartoon, sketch, face to camera, ukiya style
@@ -42,4 +43,12 @@ map_sea:
 Game Icon Institute, Game Scene, (extremely detailed CG unity 8k wallpaper),(masterpiece:1.4), (best quality:1.3), (ultra-detailed), (best illustration),(best shadow), (an extremely delicate and beautiful:1.2), finely detail, western building structure, 2D, midnight background, multiple platform, dock, moonlignt, landscaoe, wide_shot, cartoon, sketch, face to camera, seascape house, there is a ocean over the platforms,starry night sky, aquarium
 Negative prompt: (easynegative:0.8),black, dark,Low resolution, water marked, text
 Steps: 40, Sampler: DPM++ 2M SDE Karras, CFG scale: 7, Seed: 3246154361, Size: 2048x576, Model hash: 879db523c3, Denoising strength: 0.66, Clip skip: 2, Version: v1.5.1
+```
+
+## ui
+
+```
+Game icon Institute, Stone material, game icon, blue button, game button, Still life, Simple background, <lora:game icon institute_Qanniu_v1:1>
+Negative prompt: (easynegative:0.8),black, dark,Low resolution
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 267488770, Size: 512x512, Model hash: c112297163, Clip skip: 2, ENSD: 31337, Lora hashes: "game icon institute_Qanniu_v1: cf944cde1f27", Version: v1.5.1
 ```
